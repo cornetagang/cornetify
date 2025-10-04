@@ -162,12 +162,12 @@ async function getPlaylistTracks(playlistId) {
         );
         total = data.total;
         const mappedTracks = data.items
-            .filter(item => item.track && item.track.album)
-            .map(item => ({
-                title: item.track.name,
-                artist: item.track.artists.map(a => a.name).join(', '),
-                search_query: `${item.track.name} ${item.track.artists[0].name}`
-            }));
+        .filter(item => item.track && item.track.name && item.track.artists)
+        .map(item => ({
+            title: item.track.name,
+            artist: item.track.artists?.map(a => a.name).join(', ') || "Desconocido",
+            search_query: `${item.track.name} ${item.track.artists?.[0]?.name || ""}`
+        }));
         tracks.push(...mappedTracks);
         offset += data.items.length;
     }
