@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproductor Híbrido Personal</title>
+    <title>Cornetify</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
 
     <div class="player-container">
-        <h1>Reproductor Híbrido 🎶</h1>
+        <h1>Cornetify<h1>
         
         <div id="auth-status">
             <button id="login-btn">Conectar Spotify</button>
@@ -24,7 +24,8 @@
             
             <div id="playlist-preview"></div>
 
-            <audio id="audio-player" controls></audio>
+            <!-- Player de YouTube en vez de audio -->
+            <div id="youtube-player"></div>
 
             <div id="player-controls">
                 <button id="prev-btn">⏮️ Anterior</button>
@@ -33,9 +34,11 @@
             </div>
         </div>
         
-        <p class="nota">Fuente de Metadatos: Spotify | Fuente de Audio: Audius (Sin Anuncios)</p>
+        <p class="nota">Fuente de Metadatos: Spotify | Fuente de Audio: YouTube</p>
     </div>
 
+    <!-- API de YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
 </body>
 </html>
