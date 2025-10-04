@@ -1,12 +1,11 @@
 // ===================================================================
-// CONFIGURACIÓN DE LA APLICACIÓN (¡REEMPLAZA ESTOS VALORES!)
+// CONFIGURACIÓN DE LA APLICACIÓN
 // ===================================================================
-// CLIENT_ID obtenido de tu imagen
-const CLIENT_ID = '73f7f745b604943ab969dee9b8eb99668'; 
+// CLIENT_ID obtenido de tu app en el dashboard de Spotify
+const CLIENT_ID = '7371745b604943eb969dee9b8eb99668'; 
 
-// Esta debe ser la URL que configuraste en tu App de Spotify (generalmente localhost)
-// IMPORTANTE: Debe coincidir exactamente con la configurada en el Dashboard de Spotify.
-const REDIRECT_URI = 'https://cornetagang.github.io/cornetify/'; // Ejemplo para Live Server de VS Code
+// Debe coincidir EXACTAMENTE con la redirect URI registrada en Spotify
+const REDIRECT_URI = 'https://cornetagang.github.io/cornetify/';
 
 const SPOTIFY_BASE_URL = 'https://api.spotify.com/';
 const AUDIUS_BASE_URL = 'https://discoveryprovider.audius.co/v1';
@@ -34,11 +33,9 @@ let currentTrackIndex = 0;
 // MÓDULO DE AUTENTICACIÓN PKCE (PERSISTENCIA DE TOKEN)
 // ===================================================================
 
-// Guarda el token en localStorage para usarlo en futuras sesiones
 let accessToken = localStorage.getItem('spotify_access_token');
 let refreshToken = localStorage.getItem('spotify_refresh_token');
 
-// Helper para generar una cadena aleatoria
 function generateRandomString(length) {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -48,7 +45,6 @@ function generateRandomString(length) {
     return text;
 }
 
-// Helper para codificar el code_verifier
 async function generateCodeChallenge(codeVerifier) {
     const data = new TextEncoder().encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);
@@ -58,15 +54,15 @@ async function generateCodeChallenge(codeVerifier) {
         .replace(/\//g, '_');
 }
 
-// Inicia el flujo de autenticación (redirige a Spotify)
+// Inicia el flujo de autenticación
 async function spotifyLogin() {
     const codeVerifier = generateRandomString(128);
     const codeChallenge = await generateCodeChallenge(codeVerifier);
 
     localStorage.setItem('code_verifier', codeVerifier);
 
-    const scope = 'playlist-read-private user-read-private'; // Permisos necesarios
-    const authUrl = new URL("https://developer.spotify.com/documentation/web-api0");
+    const scope = 'playlist-read-private user-read-private';
+    const authUrl = new URL("https://accounts.spotify.com/authorize");
 
     const params = {
         response_type: 'code',
@@ -93,7 +89,7 @@ async function getAccessToken(code) {
         code_verifier: codeVerifier,
     });
 
-    const response = await fetch('https://developer.spotify.com/documentation/web-api1', {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params,
@@ -101,7 +97,6 @@ async function getAccessToken(code) {
 
     const data = await response.json();
     
-    // Almacenar tokens
     accessToken = data.access_token;
     refreshToken = data.refresh_token;
     localStorage.setItem('spotify_access_token', accessToken);
@@ -120,7 +115,7 @@ async function refreshAccessToken() {
         refresh_token: refreshToken,
     });
 
-    const response = await fetch('https://developer.spotify.com/documentation/web-api1', {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params,
@@ -134,7 +129,7 @@ async function refreshAccessToken() {
     console.log("Token de Spotify refrescado con éxito.");
 }
 
-// Limpia el almacenamiento y desloguea
+// Limpia sesión
 function spotifyLogout() {
     localStorage.removeItem('spotify_access_token');
     localStorage.removeItem('spotify_refresh_token');
@@ -149,7 +144,7 @@ function spotifyLogout() {
     updateUI(false);
 }
 
-// Actualiza la interfaz de usuario (ocultar/mostrar botones)
+// Actualiza UI
 function updateUI(isLoggedIn) {
     if (isLoggedIn) {
         loginBtn.style.display = 'none';
@@ -166,9 +161,8 @@ function updateUI(isLoggedIn) {
 
 
 // ===================================================================
-// 1. UTILIDAD SPOTIFY: Fetch Genérico (Usa el token persistente)
+// 1. Fetch genérico Spotify
 // ===================================================================
-
 async function fetchWebApi(endpoint, method, body) {
     if (!accessToken) {
         alert("Tu sesión de Spotify expiró. Por favor, inicia sesión de nuevo.");
@@ -177,38 +171,30 @@ async function fetchWebApi(endpoint, method, body) {
     }
     
     let res = await fetch(`${SPOTIFY_BASE_URL}${endpoint}`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
         method,
-        body: JSON.stringify(body)
+        body: body ? JSON.stringify(body) : null
     });
 
-    // Si el token falló, intentamos refrescarlo y reintentamos la petición
     if (res.status === 401) {
         await refreshAccessToken();
         res = await fetch(`${SPOTIFY_BASE_URL}${endpoint}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+            headers: { Authorization: `Bearer ${accessToken}` },
             method,
-            body: JSON.stringify(body)
+            body: body ? JSON.stringify(body) : null
         });
     }
 
     const data = await res.json();
-    if (data.error) {
-         throw new Error(`Error en API de Spotify: ${data.error.message}`);
-    }
+    if (data.error) throw new Error(`Error en API de Spotify: ${data.error.message}`);
     return data;
 }
 
-// ===================================================================
-// 2. OBTENER PLAYLIST DE SPOTIFY (Metadatos)
-// ===================================================================
 
+// ===================================================================
+// 2. Obtener playlist de Spotify
+// ===================================================================
 async function getPlaylistTracks(playlistId) {
-    // Implementación idéntica a la del paso anterior (paginación)
     let tracks = [];
     let offset = 0;
     let total = 1;
@@ -221,7 +207,7 @@ async function getPlaylistTracks(playlistId) {
         total = data.total;
         
         const mappedTracks = data.items
-            .filter(item => item.track && item.track.album) // Filtro adicional de validez
+            .filter(item => item.track && item.track.album)
             .map(item => ({
                 title: item.track.name,
                 artist: item.track.artists.map(a => a.name).join(', '),
@@ -235,10 +221,10 @@ async function getPlaylistTracks(playlistId) {
     return tracks;
 }
 
-// ===================================================================
-// 3. REPRODUCCIÓN HÍBRIDA (Búsqueda Limpia en Audius)
-// ===================================================================
 
+// ===================================================================
+// 3. Reproducción híbrida (Audius)
+// ===================================================================
 async function startHybridPlayback(track) {
     songTitleDisplay.textContent = `Buscando audio limpio: ${track.title} - ${track.artist}`;
     audioPlayer.pause(); 
@@ -263,10 +249,10 @@ async function startHybridPlayback(track) {
     }
 }
 
-// ===================================================================
-// 4. LÓGICA DE CONTROL DEL REPRODUCTOR
-// ===================================================================
 
+// ===================================================================
+// 4. Control de reproductor
+// ===================================================================
 async function loadPlaylistFromUrl() {
     const url = spotifyUrlInput.value.trim();
     const playlistMatch = url.match(/playlist\/([a-zA-Z0-9]+)/);
@@ -317,33 +303,23 @@ function displayPlaylistPreview() {
 
 
 // ===================================================================
-// INICIALIZACIÓN Y EVENT LISTENERS
+// Inicialización y listeners
 // ===================================================================
-
-// Maneja la redirección después del login de Spotify
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
     if (code) {
-        // Si hay un código, es la respuesta de Spotify, ¡intercambiamos por el token!
         getAccessToken(code);
-        
-        // Limpiamos el código de la URL para evitar errores al refrescar
         history.replaceState(null, null, window.location.pathname);
     } else if (accessToken) {
-        // Si ya tenemos un token, mostramos la app directamente
         updateUI(true);
     } else {
-        // Si no hay código ni token, mostramos el botón de login
         updateUI(false);
     }
 };
 
-// Autenticación
 loginBtn.addEventListener('click', spotifyLogin);
 logoutBtn.addEventListener('click', spotifyLogout);
-
-// Funcionalidad del reproductor
 loadPlaylistBtn.addEventListener('click', loadPlaylistFromUrl);
 audioPlayer.addEventListener('ended', playNextTrack);
