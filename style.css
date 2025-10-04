@@ -8,20 +8,48 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
 }
+
 .player-container {
     background: #3c414d;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     text-align: center;
-    width: 400px;
+    width: 420px;
 }
-h1 { margin-bottom: 15px; font-size: 1.5em; }
-#song-title { font-size: 1.2em; height: 30px; margin: 15px 0; }
-#spotify-url-input { width: 65%; padding: 10px; border-radius: 5px 0 0 5px; border: 1px solid #61afef; }
-#load-playlist-btn { padding: 10px 15px; background: #61afef; border: none; color: white; border-radius: 0 5px 5px 0; cursor: pointer; }
-#audio-player { width: 100%; margin-top: 20px; }
-.nota { font-size: 0.75em; color: #a9a9a9; margin-top: 15px; }
+
+h1 { 
+    margin-bottom: 15px; 
+    font-size: 1.5em; 
+}
+
+#song-title { 
+    font-size: 1.2em; 
+    height: 30px; 
+    margin: 15px 0; 
+}
+
+#spotify-url-input { 
+    width: 65%; 
+    padding: 10px; 
+    border-radius: 5px 0 0 5px; 
+    border: 1px solid #61afef; 
+}
+
+#load-playlist-btn { 
+    padding: 10px 15px; 
+    background: #61afef; 
+    border: none; 
+    color: white; 
+    border-radius: 0 5px 5px 0; 
+    cursor: pointer; 
+}
+
+.nota { 
+    font-size: 0.75em; 
+    color: #a9a9a9; 
+    margin-top: 15px; 
+}
 
 /* Estilos de Autenticación */
 #login-btn, #logout-btn {
@@ -53,6 +81,15 @@ h1 { margin-bottom: 15px; font-size: 1.5em; }
     text-overflow: ellipsis;
 }
 
+/* Player YouTube */
+#youtube-player {
+    margin: 15px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+/* Controles de reproducción */
 #player-controls {
     display: flex;
     justify-content: center;
