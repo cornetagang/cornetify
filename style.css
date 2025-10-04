@@ -1,0 +1,52 @@
+/* (Mantenemos los estilos anteriores para player-container, h1, body, etc.) */
+
+/* Nuevos estilos para la búsqueda y resultados */
+#search-input {
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #61afef;
+}
+
+#search-btn {
+    padding: 10px 15px;
+    background: #61afef;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#results-container {
+    background: #4a4f59;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.track-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #3c414d;
+    transition: background 0.2s;
+}
+
+.track-item:hover {
+    background: #5c6270;
+}
+
+/* Estilo para el reproductor de HTML */
+#audio-player {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.nota {
+    font-size: 0.75em;
+    color: #a9a9a9;
+    margin-top: 10px;
+}
