@@ -1,52 +1,54 @@
-/* (Mantenemos los estilos anteriores para player-container, h1, body, etc.) */
-
-/* Nuevos estilos para la búsqueda y resultados */
-#search-input {
-    width: 70%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #61afef;
-}
-
-#search-btn {
-    padding: 10px 15px;
-    background: #61afef;
-    border: none;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #282c34;
     color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+.player-container {
+    background: #3c414d;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 400px;
+}
+h1 { margin-bottom: 15px; font-size: 1.5em; }
+#song-title { font-size: 1.2em; height: 30px; margin: 15px 0; }
+#spotify-url-input { width: 65%; padding: 10px; border-radius: 5px 0 0 5px; border: 1px solid #61afef; }
+#load-playlist-btn { padding: 10px 15px; background: #61afef; border: none; color: white; border-radius: 0 5px 5px 0; cursor: pointer; }
+#audio-player { width: 100%; margin-top: 20px; }
+.nota { font-size: 0.75em; color: #a9a9a9; margin-top: 15px; }
+
+/* Estilos de Autenticación */
+#login-btn, #logout-btn {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
 }
+#login-btn { background: #1DB954; color: white; }
+#logout-btn { background: #e74c3c; color: white; }
 
-#results-container {
-    background: #4a4f59;
-    padding: 10px;
-    margin-bottom: 20px;
+/* Estilos de Playlist Preview */
+#playlist-preview {
     max-height: 150px;
     overflow-y: auto;
-    border-radius: 5px;
     text-align: left;
+    padding: 5px 0;
+    margin-bottom: 15px;
 }
-
-.track-item {
-    padding: 8px;
-    cursor: pointer;
-    border-bottom: 1px solid #3c414d;
-    transition: background 0.2s;
-}
-
-.track-item:hover {
-    background: #5c6270;
-}
-
-/* Estilo para el reproductor de HTML */
-#audio-player {
-    width: 100%;
-    margin-top: 15px;
-}
-
-.nota {
-    font-size: 0.75em;
-    color: #a9a9a9;
-    margin-top: 10px;
+#playlist-preview p {
+    margin: 5px 0;
+    padding: 2px;
+    font-size: 0.9em;
+    color: #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
