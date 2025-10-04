@@ -323,3 +323,29 @@ loginBtn.addEventListener('click', spotifyLogin);
 logoutBtn.addEventListener('click', spotifyLogout);
 loadPlaylistBtn.addEventListener('click', loadPlaylistFromUrl);
 audioPlayer.addEventListener('ended', playNextTrack);
+
+function playPrevTrack() {
+    currentTrackIndex--;
+    if (currentTrackIndex >= 0) {
+        startHybridPlayback(currentPlaylist[currentTrackIndex]);
+    } else {
+        songTitleDisplay.textContent = "Estás al inicio de la playlist.";
+        currentTrackIndex = 0;
+    }
+}
+
+function togglePlayPause() {
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+    } else {
+        audioPlayer.pause();
+    }
+}
+
+const prevBtn = document.getElementById('prev-btn');
+const playBtn = document.getElementById('play-btn');
+const nextBtn = document.getElementById('next-btn');
+
+prevBtn.addEventListener('click', playPrevTrack);
+playBtn.addEventListener('click', togglePlayPause);
+nextBtn.addEventListener('click', playNextTrack);
