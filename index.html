@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reproductor Híbrido Personal</title>
     <link rel="stylesheet" href="style.css"> 
-    </head>
+</head>
 <body>
 
     <div class="player-container">
-        <h1>Mi Reproductor Híbrido 🎶</h1>
+        <h1>Reproductor Híbrido 🎶</h1>
         
-        <input type="text" id="spotify-url-input" placeholder="Pega aquí el Link de Playlist de Spotify" />
-        <button id="load-playlist-btn">Cargar Playlist</button>
+        <div id="auth-status">
+            <button id="login-btn">Conectar Spotify</button>
+            <button id="logout-btn" style="display:none;">Desconectar Spotify</button>
+        </div>
         
-        <p id="song-title">Esperando playlist...</p>
-        
-        <div id="playlist-preview">
-            </div>
+        <div id="app-content" style="display:none;">
+            <input type="text" id="spotify-url-input" placeholder="Pega el Link de Playlist de Spotify" />
+            <button id="load-playlist-btn">Cargar Playlist</button>
+            
+            <p id="song-title">Esperando playlist...</p>
+            
+            <div id="playlist-preview"></div>
 
-        <audio id="audio-player" controls></audio>
+            <audio id="audio-player" controls></audio>
+        </div>
         
         <p class="nota">Fuente de Metadatos: Spotify | Fuente de Audio: Audius (Sin Anuncios)</p>
     </div>
